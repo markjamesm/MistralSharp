@@ -4,4 +4,8 @@
 
 ## About
 
-MistralSharp is a .NET client library for interfacing with the Mistral AI platform written in C# using .NET 8. MistralSharp is currently in active development so expect frequent changes in the next few weeks!
+MistralSharp is a .NET client library for interfacing with the Mistral AI platform written in C# using .NET 8. 
+
+## Note
+
+This project is currently in active development so expect frequent changes in the coming weeks!
