@@ -1,5 +1,5 @@
 ﻿namespace MistralSharp;
 
-public class IMistralClient
+public interface IMistralClient
 {
 }
