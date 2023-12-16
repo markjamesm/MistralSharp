@@ -28,7 +28,7 @@ public class MistralClient
         return await returnMessage.Content.ReadAsStringAsync();
     }
 
-    public async Task<ChatResponse> Chat(ChatRequest chatRequest)
+    public async Task<ChatResponse> ChatAsync(ChatRequest chatRequest)
     {
         var jsonRequest = JsonSerializer.Serialize(chatRequest);
         var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
