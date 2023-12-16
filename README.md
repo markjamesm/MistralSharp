@@ -4,7 +4,7 @@
 
 ## About
 
-MistralSharp is a .NET client library for interfacing with the Mistral AI Platform REST API. Great for building
+MistralSharp is an unofficial .NET SDK for interfacing with the Mistral AI Platform REST API. Great for building
 AI-enhanced apps!
 
 ## Features
