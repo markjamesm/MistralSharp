@@ -1,20 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <Version>0.1.1</Version>
+        <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+        <Version>1.0.0</Version>
         <Authors>Mark-James McDougall</Authors>
-        <Description>Unofficial .NET client library for the Mistral AI platform.</Description>
+        <Title>Mistral API Client Library</Title>
+        <Description>Unofficial .NET client library for the Mistral AI platform REST API. Supports all Mistral AI 
+            REST endpoints, making easy to add AI functionality to your .NET projects.</Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>mistral;mistral-ai;mistral7b;AI;ML;LLM;GPT</PackageTags>
+        <PackageTags>Mistral;mistral-ai;mistral7b;AI;ML;LLM;GPT;Machine Learning; Artificial Intelligence</PackageTags>
         <PackageProjectUrl>https://github.com/markjamesm/MistralSharp</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/markjamesm/MistralSharp</RepositoryUrl>
     </PropertyGroup>
-
+    
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="" />
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="System.Text.Json" Version="8.0.0" />
     </ItemGroup>
     
 </Project>

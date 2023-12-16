@@ -118,3 +118,41 @@ foreach (var choice in sampleChat.Choices)
     Console.WriteLine("Response Messages:");
     Console.WriteLine($"Role: {choice.Message.Role}\n" + $"Content: {choice.Message.Content}\n");
 }
+
+
+// Create a new EmbeddingRequest object
+var embeddings = new EmbeddingRequest()
+{
+    // The ID of the model to use for this request.
+    Model = "mistral-embed",
+    
+    // The format of the output data.
+    EncodingFormat = "float",
+    
+    // The list of strings to embed.
+    Input = new List<string>()
+    {
+        "Hello",
+        "World"
+    }
+};
+
+// Create an embedding and pass it our EmbeddingResponse object
+var embeddedResponse = await mistralClient.CreateEmbeddingsAsync(embeddings);
+
+// Print the embedding to the console
+Console.WriteLine("\n---Example Embedding Response---");
+Console.WriteLine("EmbeddingResponse:\nId: {0}\nObject: {1}\nModel: {2}\nPromptTokens: {3}\nTotalTokens: {4}",
+    embeddedResponse.Id,
+    embeddedResponse.Object,
+    embeddedResponse.Model,
+    embeddedResponse.TokenUsage?.PromptTokens,
+    embeddedResponse.TokenUsage?.TotalTokens);
+        
+foreach (var embedding in embeddedResponse.Data)
+{
+    Console.WriteLine("  - Object: {0}\n    Index: {1}\n    EmbeddingList: {2}",
+        embedding.Object,
+        embedding.Index,
+        string.Join(", ", embedding.EmbeddingList));
+}
