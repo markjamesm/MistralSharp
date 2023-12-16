@@ -1,6 +1,8 @@
 using System.Text.Json;
 using MistralSharp.Dto;
 using MistralSharp.Models;
+using ModelData = MistralSharp.Models.ModelData;
+using Permission = MistralSharp.Models.Permission;
 
 namespace MistralSharp;
 
@@ -27,20 +29,34 @@ public class MistralClient
 
         var availableModels = new AvailableModels()
         {
-            Object = availableModelsDeserialized?.Object
-        };
-
-        foreach (var model in availableModelsDeserialized?.Data)
-        {
-            availableModels.AvailableModelsList.Add(new AvailableModelsData()
+            Object = availableModelsDeserialized?.Object,
+            Data = availableModelsDeserialized.Data.Select(d => new ModelData()
             {
-                Created = model.Created,
-                Id = model.Id,
-                Object = model.Object,
-                OwnedBy = model.OwnedBy
-            });
-        }
-
+                Created = d.Created,
+                Id = d.Id,
+                Object = d.Object,
+                OwnedBy = d.OwnedBy,
+                Parent = d.Parent,
+                Root = d.Root,
+                Permission = d.Permission.Select(p => new Permission()
+                {
+                    Id = p.Id,
+                    Object = p.Object,
+                    Created = p.Created,
+                    Organization = p.Organization,
+                    Group = p.Group,
+                    IsBlocking = p.IsBlocking,
+                    AllowCreateEngine = p.AllowCreateEngine,
+                    AllowFineTuning = p.AllowFineTuning,
+                    AllowLogprobs = p.AllowLogprobs,
+                    AllowSampling = p.AllowSampling,
+                    AllowSearchIndices = p.AllowSearchIndices,
+                    AllowView = p.AllowView
+                }).ToList()
+            }).ToList()
+            
+        };
+            
         return availableModels;
     }
 }
