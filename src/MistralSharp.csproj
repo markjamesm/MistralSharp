@@ -6,9 +6,10 @@
         <Nullable>enable</Nullable>
         <Version>0.1.0</Version>
         <Authors>Mark-James McDougall</Authors>
-        <Description>Unofficial .NET client library for the Mistral AI platform</Description>
+        <Description>Unofficial .NET client library for the Mistral AI platform.</Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>mistral;mistral-ai;mistral7b</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
