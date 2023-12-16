@@ -10,7 +10,6 @@ AI-enhanced apps!
 ## Features
 
 * Targets .NET Standard 2.0 and .NET 8.
-* No external dependencies
 
 ## Usage
 
