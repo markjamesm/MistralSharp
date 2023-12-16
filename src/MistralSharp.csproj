@@ -4,6 +4,9 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Version>0.1.0</Version>
+        <Authors>Mark-James McDougall</Authors>
+        <Description>Unofficial .NET client library for the Mistral AI platform</Description>
     </PropertyGroup>
 
 </Project>
