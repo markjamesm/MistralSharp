@@ -7,6 +7,11 @@
         <Version>0.1.0</Version>
         <Authors>Mark-James McDougall</Authors>
         <Description>Unofficial .NET client library for the Mistral AI platform</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+    
 </Project>
