@@ -5,8 +5,9 @@
         <Version>1.0.0</Version>
         <Authors>Mark-James McDougall</Authors>
         <Title>MistralSharp</Title>
-        <Description>Unofficial .NET client library for the Mistral AI platform REST API. Supports all Mistral AI 
-            REST endpoints, making easy to add AI functionality to your .NET projects.</Description>
+        <Description>Unofficial .NET client library for interfacing with the Mistral AI Platform REST API. 
+            Great for building AI-enhanced apps!
+        </Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>Mistral;mistral-ai;mistral7b;AI;ML;LLM;GPT;Machine Learning; Artificial Intelligence</PackageTags>
