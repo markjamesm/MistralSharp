@@ -8,6 +8,7 @@
         <Authors>Mark-James McDougall</Authors>
         <Description>Unofficial .NET client library for the Mistral AI platform</Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
