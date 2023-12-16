@@ -1,6 +1,6 @@
 # MistralSharp
 
-[![C#](https://img.shields.io/badge/Language-CSharp-darkgreen.svg)](https://en.wikipedia.org/wiki/C_Sharp_(programming_language)) [![License](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+[![C#](https://img.shields.io/badge/Language-CSharp-darkgreen.svg)](https://en.wikipedia.org/wiki/C_Sharp_(programming_language)) [![NuGet](https://img.shields.io/nuget/vpre/MistralSharp)](https://www.nuget.org/packages/MistralSharp) [![License](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 
 ## About
 
@@ -11,7 +11,7 @@ Features async support and no external dependencies.
 
 Check out the [Sample project](https://github.com/markjamesm/MistralSharp/blob/main/sample/Program.cs) to see an example of usage.
 
-Start by downloading the nuget package and importing it into your project. Then, creating a new instance of MistralClient and pass your API key:
+Start by [downloading the nuget package](https://www.nuget.org/packages/MistralSharp) and importing it into your project. Then, creating a new instance of MistralClient and pass your API key:
 
 ```csharp
 var mistralClient = new MistralClient(apiKey);
