@@ -104,8 +104,8 @@ create a create a new `EmbeddingRequest` object:
 ```csharp
 var embeddings = new EmbeddingRequest()
 {
-// The ID of the model to use for this request.
-Model = ModelType.MistralEmbed,
+    // The ID of the model to use for this request.
+    Model = ModelType.MistralEmbed,
 
     // The format of the output data.
     EncodingFormat = "float",
