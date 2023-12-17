@@ -53,7 +53,7 @@ var chatRequest = new ChatRequest()
 {
     
     // The ID of the model to use. You can use GetAvailableModelsAsync() to get the list of available models
-    Model = "mistral-medium",
+    Model = ModelType.MistralMedium,
     
     // Pass a list of messages to the model. 
     // The role can either be "user" or "agent"
@@ -124,7 +124,7 @@ foreach (var choice in sampleChat.Choices)
 var embeddings = new EmbeddingRequest()
 {
     // The ID of the model to use for this request.
-    Model = "mistral-embed",
+    Model = ModelType.MistralEmbed,
     
     // The format of the output data.
     EncodingFormat = "float",
