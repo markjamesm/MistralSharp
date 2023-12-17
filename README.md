@@ -4,7 +4,7 @@
 
 ## About
 
-MistralSharp is an unofficial .NET SDK for interfacing with the Mistral AI Platform REST API. Great for building
+MistralSharp is an unofficial .NET SDK for the [Mistral AI Platform](https://mistral.ai/). Great for building
 AI-enhanced apps!
 
 ## Features
@@ -18,8 +18,7 @@ Start by [downloading the nuget package](https://www.nuget.org/packages/MistralS
 
 Check out the [Sample project](https://github.com/markjamesm/MistralSharp/blob/main/sample/Program.cs) to see an example of how to use the library in a simple console application.
 
-
-To access the API endpoints, create a new instance of MistralClient and pass in your API key:
+To access the API endpoints, create a new instance of the `MistralClient` class and pass in your API key:
 
 ```csharp
 var mistralClient = new MistralClient(apiKey);
@@ -36,8 +35,8 @@ var models = await mistralClient.GetAvailableModelsAsync();
 
 ### ChatAsync()
 
-This method allows you to chat with an AI model of your choice. To start a chat, first create a new ChatRequest object 
-(note: only Model and Messages are required, the other parameters are optional and will default to the values 
+This method allows you to chat with an AI model of your choice. To start a chat, first create a new `ChatRequest` 
+object (note: only Model and Messages are required, the other parameters are optional and will default to the values 
 specified below):
 
 ```csharp
@@ -45,7 +44,7 @@ var chatRequest = new ChatRequest()
 {
     
     // The ID of the model to use. You can use GetAvailableModelsAsync() to get the list of available models
-    Model = "mistral-medium",
+    Model = ModelType.MistralMedium,
     
     // Pass a list of messages to the model. 
     // The role can either be "user" or "agent"
@@ -92,20 +91,21 @@ var chatRequest = new ChatRequest()
 };
 ```
 
-Finally, call the ChatAsync() method and pass the ChatRequest object:
+Finally, call the `ChatAsync()` method and pass the `ChatRequest` object:
 ```csharp
 var sampleChat = await mistralClient.ChatAsync(chatRequest);
 ```
 
 ### CreateEmbeddingsAsync()
 
-The embeddings API allows you to embed sentences. To use it, first create a create a new EmbeddingRequest object:
+The embeddings API allows you to embed sentences and can be used to power a RAG application. To use it, first 
+create a create a new `EmbeddingRequest` object:
 
 ```csharp
 var embeddings = new EmbeddingRequest()
 {
 // The ID of the model to use for this request.
-Model = "mistral-embed",
+Model = ModelType.MistralEmbed,
 
     // The format of the output data.
     EncodingFormat = "float",
@@ -119,7 +119,7 @@ Model = "mistral-embed",
 };
 ```
 
-Next, pass the EmbeddingRequest object to ChatEmbeddingsAsync() method:
+Next, pass the `EmbeddingRequest` object to `ChatEmbeddingsAsync()` method:
 
 ```csharp
 var embeddedResponse = await mistralClient.CreateEmbeddingsAsync(embeddings);
