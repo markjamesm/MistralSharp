@@ -2,19 +2,22 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-        <Version>1.0.0</Version>
+        <Version>1.0.1</Version>
         <Authors>Mark-James McDougall</Authors>
         <Title>MistralSharp</Title>
-        <Description>Unofficial .NET client library for interfacing with the Mistral AI Platform REST API. 
-            Great for building AI-enhanced apps!
+        <Description>Unofficial .NET SDK for the Mistral AI Platform. Great for building AI-enhanced apps!
         </Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageTags>Mistral;mistral-ai;mistral7b;AI;ML;LLM;GPT;Machine Learning; Artificial Intelligence</PackageTags>
+        <PackageTags>Mistral;mistral-ai;mistral7b;mixtral;AI;ML;LLM;GPT;Machine Learning; Artificial Intelligence</PackageTags>
         <PackageProjectUrl>https://github.com/markjamesm/MistralSharp</PackageProjectUrl>
         <RepositoryUrl>https://github.com/markjamesm/MistralSharp</RepositoryUrl>
     </PropertyGroup>
-    
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="System.Text.Json" Version="8.0.0" />
+    </ItemGroup>
+
     <ItemGroup>
         <None Include="..\README.md">
             <Pack>True</Pack>
@@ -22,8 +25,15 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-        <PackageReference Include="System.Text.Json" Version="8.0.0" />
-    </ItemGroup>
+    <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
+        <ReadLinesFromFile File="../RELEASENOTES.txt" >
+            <Output TaskParameter="Lines" ItemName="ReleaseNoteLines"/>
+        </ReadLinesFromFile>
+        <PropertyGroup>
+            <PackageReleaseNotes>
+                $([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../RELEASENOTES.txt"))
+            </PackageReleaseNotes>
+        </PropertyGroup>
+    </Target>
     
 </Project>
