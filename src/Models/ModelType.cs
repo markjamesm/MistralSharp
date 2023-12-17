@@ -1,11 +1,15 @@
 namespace MistralSharp.Models
 {
-    public sealed class ModelType
+    /// <summary>
+    /// This class defines the available models on the Mistral AI platform.
+    /// </summary>
+    public static class ModelType
     {
-        // Embedding models enable retrieval and retrieval-augmented generation applications.
+        // Embedding models enable retrieval and retrieval-augmented generation (RAG) applications.
         public static string MistralEmbed => "mistral-embed";
     
-        // This generative endpoint is best used for large batch processing tasks where cost is a significant factor but reasoning capabilities are not crucial.
+        // This generative endpoint is best used for large batch processing tasks where cost is a significant factor
+        // but reasoning capabilities are not crucial.
         public static string MistralTiny => "mistral-tiny";
     
         // Higher reasoning capabilities and more capabilities.
