@@ -15,35 +15,24 @@ namespace MistralSharp
     /// </summary>
     public class MistralClient
     {
-        private static readonly HttpClient _httpClient = new HttpClient();
-        private static readonly string _baseUrl = "https://api.mistral.ai/v1";
+        private static readonly HttpClient HttpClient = new HttpClient();
+        private const string BaseUrl = "https://api.mistral.ai/v1";
 
         public MistralClient(string apiKey)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = 
+            HttpClient.DefaultRequestHeaders.Authorization = 
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
         }
-    
-        private static async Task<string> GetResponseAsync(string endpoint, string modelType = "")
-        {
-            var returnMessage = await _httpClient.GetAsync(_baseUrl + (endpoint ?? "")).ConfigureAwait(false);
-
-            return await returnMessage.Content.ReadAsStringAsync();
-        }
-
+        
         
         /// <summary>
         /// Enables you to chat with an AI model on the Mistral platform.
         /// </summary>
-        /// <param name="chatRequest"></param>
-        /// <returns>A ChatResponse object</returns>
+        /// <param name="chatRequest">A ChatRequest object containing message and other data.</param>
+        /// <returns>A ChatResponse object with the AI's response.</returns>
         public async Task<ChatResponse> ChatAsync(ChatRequest chatRequest)
         {
-            var jsonRequest = JsonSerializer.Serialize(chatRequest);
-            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-        
-            var response = await _httpClient.PostAsync(_baseUrl + "/chat/completions", content).ConfigureAwait(false);
-            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var jsonResponse = await PostToApiAsync(chatRequest, "/chat/completions");
             var chatResponseDto = JsonSerializer.Deserialize<ChatResponseDto>(jsonResponse);
 
             var chatResponse = new ChatResponse()
@@ -72,6 +61,7 @@ namespace MistralSharp
         
             return chatResponse;
         }
+        
         
         /// <summary>
         /// Get the list of available models offered on the Mistral AI platform.
@@ -115,13 +105,17 @@ namespace MistralSharp
             return availableModels;
         }
         
+        
+        /// <summary>
+        /// The embeddings API allows you to embed sentences and can be used to power a RAG application.
+        /// </summary>
+        /// <param name="embeddingRequest"></param>
+        /// <returns>An EmbeddingResponse object.</returns>
         public async Task<EmbeddingResponse> CreateEmbeddingsAsync(EmbeddingRequest embeddingRequest)
         {
-            var jsonRequest = JsonSerializer.Serialize(embeddingRequest);
-            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(_baseUrl + "/embeddings", content).ConfigureAwait(false);
-            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var jsonResponse = await PostToApiAsync(embeddingRequest, "/embeddings");
             var embeddingResponseDto = JsonSerializer.Deserialize<EmbeddingResponseDto>(jsonResponse);
+            
             var embeddingResponse = new EmbeddingResponse()
             {
                 Id = embeddingResponseDto.Id,
@@ -140,7 +134,39 @@ namespace MistralSharp
                 }
                 
             };
+            
             return embeddingResponse;
+        }
+        
+        
+        /// <summary>
+        /// Retrieves the response from the specified API endpoint asynchronously.
+        /// </summary>
+        /// <param name="endpoint">The API endpoint to send the request to.</param>
+        /// <param name="modelType">The type of model to deserialize the response content into (optional).</param>
+        /// <returns>The response content as a string.</returns>
+        private static async Task<string> GetResponseAsync(string endpoint, string modelType = "")
+        {
+            var returnMessage = await HttpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
+
+            return await returnMessage.Content.ReadAsStringAsync();
+        }
+
+
+        /// <summary>
+        /// Helper method to serialize an object to JSON and return a JSON response string.
+        /// </summary>
+        /// <param name="objectToSerialize">The object to be serialized.</param>
+        /// <param name="endpoint">The endpoint to send the JSON request to.</param>
+        /// <returns>A string representing the JSON response.</returns>
+        private static async Task<string> PostToApiAsync(object objectToSerialize, string endpoint)
+        {
+            var jsonRequest = JsonSerializer.Serialize(objectToSerialize);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync(BaseUrl + endpoint, content).ConfigureAwait(false);
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            return jsonResponse;
         }
     }
 }
