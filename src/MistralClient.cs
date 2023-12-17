@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using MistralSharp.Dto;
+using MistralSharp.Helpers;
 using MistralSharp.Models;
 using ModelData = MistralSharp.Models.ModelData;
 using Permission = MistralSharp.Models.Permission;
@@ -35,29 +36,7 @@ namespace MistralSharp
             var jsonResponse = await PostToApiAsync(chatRequest, "/chat/completions");
             var chatResponseDto = JsonSerializer.Deserialize<ChatResponseDto>(jsonResponse);
 
-            var chatResponse = new ChatResponse()
-            {
-                Id = chatResponseDto.Id,
-                Created = chatResponseDto.Created,
-                ObjectPropertyName = chatResponseDto.ObjectPropertyName,
-                Model = chatResponseDto.Model,
-                Usage = new Usage()
-                {
-                    CompletionTokens = chatResponseDto.Usage.CompletionTokens,
-                    PromptTokens = chatResponseDto.Usage.PromptTokens,
-                    TotalTokens = chatResponseDto.Usage.TotalTokens
-                },
-                Choices = chatResponseDto.Choices.Select(c => new Choice()
-                {
-                    Index = c.Index,
-                    FinishReason = c.FinishReason,
-                    Message = new ResponseMessage()
-                    {
-                        Role = c.Message.Role,
-                        Content = c.Message.Content
-                    }
-                })
-            };
+            var chatResponse = DtoMapper.MapChatResponse(chatResponseDto);
         
             return chatResponse;
         }
@@ -70,37 +49,9 @@ namespace MistralSharp
         public async Task<AvailableModels> GetAvailableModelsAsync()
         {
             var jsonResponse = await GetResponseAsync("/models");
-            var availableModelsDeserialized = JsonSerializer.Deserialize<AvailableModelsDto>(jsonResponse);
+            var availableModelsDto = JsonSerializer.Deserialize<AvailableModelsDto>(jsonResponse);
 
-            var availableModels = new AvailableModels()
-            {
-                Object = availableModelsDeserialized?.Object,
-                Data = availableModelsDeserialized.Data.Select(d => new ModelData()
-                {
-                    Created = d.Created,
-                    Id = d.Id,
-                    Object = d.Object,
-                    OwnedBy = d.OwnedBy,
-                    Parent = d.Parent,
-                    Root = d.Root,
-                    Permission = d.Permission.Select(p => new Permission()
-                    {
-                        Id = p.Id,
-                        Object = p.Object,
-                        Created = p.Created,
-                        Organization = p.Organization,
-                        Group = p.Group,
-                        IsBlocking = p.IsBlocking,
-                        AllowCreateEngine = p.AllowCreateEngine,
-                        AllowFineTuning = p.AllowFineTuning,
-                        AllowLogprobs = p.AllowLogprobs,
-                        AllowSampling = p.AllowSampling,
-                        AllowSearchIndices = p.AllowSearchIndices,
-                        AllowView = p.AllowView
-                    }).ToList()
-                }).ToList()
-            
-            };
+            var availableModels = DtoMapper.MapAvailableModels(availableModelsDto);
             
             return availableModels;
         }
@@ -116,24 +67,7 @@ namespace MistralSharp
             var jsonResponse = await PostToApiAsync(embeddingRequest, "/embeddings");
             var embeddingResponseDto = JsonSerializer.Deserialize<EmbeddingResponseDto>(jsonResponse);
             
-            var embeddingResponse = new EmbeddingResponse()
-            {
-                Id = embeddingResponseDto.Id,
-                Model = embeddingResponseDto.Model,
-                Object = embeddingResponseDto.Object,
-                Data = embeddingResponseDto.Data.Select(d => new Embedding()
-                {
-                    Index = d.Index,
-                    Object = d.Object,
-                    EmbeddingList = d.Embedding
-                }).ToList(),
-                TokenUsage = new TokenUsage()
-                {
-                    PromptTokens = embeddingResponseDto.Usage.PromptTokens,
-                    TotalTokens = embeddingResponseDto.Usage.TotalTokens
-                }
-                
-            };
+            var embeddingResponse = DtoMapper.MapEmbeddingResponse(embeddingResponseDto);
             
             return embeddingResponse;
         }
