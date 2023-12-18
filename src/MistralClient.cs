@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -6,8 +5,6 @@ using System.Threading.Tasks;
 using MistralSharp.Dto;
 using MistralSharp.Helpers;
 using MistralSharp.Models;
-using ModelData = MistralSharp.Models.ModelData;
-using Permission = MistralSharp.Models.Permission;
 
 namespace MistralSharp
 {
@@ -77,9 +74,8 @@ namespace MistralSharp
         /// Retrieves the response from the specified API endpoint asynchronously.
         /// </summary>
         /// <param name="endpoint">The API endpoint to send the request to.</param>
-        /// <param name="modelType">The type of model to deserialize the response content into (optional).</param>
         /// <returns>The response content as a string.</returns>
-        private static async Task<string> GetResponseAsync(string endpoint, string modelType = "")
+        private static async Task<string> GetResponseAsync(string endpoint)
         {
             var returnMessage = await HttpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
 
