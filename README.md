@@ -96,6 +96,13 @@ Finally, call the `ChatAsync()` method and pass the `ChatRequest` object:
 var sampleChat = await mistralClient.ChatAsync(chatRequest);
 ```
 
+### ChatStreamAsync()
+
+Operates the same as `ChatAsync()` except with support for streaming back partial progress 
+(ChatRequest.Stream set to true). Returns an `IAsyncEnumerable<ChatResponse>`.
+
+NOTE: This will implemented in an upcoming release as it's still being worked on.
+
 ### CreateEmbeddingsAsync()
 
 The embeddings API allows you to embed sentences and can be used to power a RAG application. To use it, first 
@@ -119,7 +126,7 @@ var embeddings = new EmbeddingRequest()
 };
 ```
 
-Next, pass the `EmbeddingRequest` object to `ChatEmbeddingsAsync()` method:
+Lastly, pass the `EmbeddingRequest` object to `ChatEmbeddingsAsync()` method:
 
 ```csharp
 var embeddedResponse = await mistralClient.CreateEmbeddingsAsync(embeddings);

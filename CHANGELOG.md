@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 - 2023-12-20
+
+- Added more descriptive error messages for HttpClient errors.
+
 ## 1.0.1 - 2023-12-16
 
 - Refactored MistralClient class.

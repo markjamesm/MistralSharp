@@ -1,4 +1,6 @@
-using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -6,8 +8,6 @@ using System.Threading.Tasks;
 using MistralSharp.Dto;
 using MistralSharp.Helpers;
 using MistralSharp.Models;
-using ModelData = MistralSharp.Models.ModelData;
-using Permission = MistralSharp.Models.Permission;
 
 namespace MistralSharp
 {
@@ -27,18 +27,38 @@ namespace MistralSharp
         
         
         /// <summary>
-        /// Enables you to chat with an AI model on the Mistral platform.
+        /// Enables you to chat with an AI model on the Mistral platform. For streaming, use the StreamChatAsync()
+        /// method instead.
         /// </summary>
         /// <param name="chatRequest">A ChatRequest object containing message and other data.</param>
         /// <returns>A ChatResponse object with the AI's response.</returns>
         public async Task<ChatResponse> ChatAsync(ChatRequest chatRequest)
         {
+            if (chatRequest.Stream)
+            {
+                throw new InvalidOperationException("Error: stream parameter set to true. For streaming calls," +
+                                                    "use the StreamChatAsync() method instead."); 
+            }
+            
             var jsonResponse = await PostToApiAsync(chatRequest, "/chat/completions");
             var chatResponseDto = JsonSerializer.Deserialize<ChatResponseDto>(jsonResponse);
 
             var chatResponse = DtoMapper.MapChatResponse(chatResponseDto);
-        
+
             return chatResponse;
+        }
+        
+
+        public IAsyncEnumerable<ChatResponse> ChatStreamAsync(ChatRequest chatRequest)
+        {
+            if (chatRequest.Stream == false)
+            {
+                throw new InvalidOperationException("Error: ChatRequest.Stream is set to false. For " +
+                                                    "non-streaming calls, use the ChatAsync() method instead."); 
+            }
+
+            throw new NotImplementedException("Error: This endpoint is not yet implemented but will be in " +
+                                              "a future release.");
         }
         
         
@@ -77,15 +97,32 @@ namespace MistralSharp
         /// Retrieves the response from the specified API endpoint asynchronously.
         /// </summary>
         /// <param name="endpoint">The API endpoint to send the request to.</param>
-        /// <param name="modelType">The type of model to deserialize the response content into (optional).</param>
         /// <returns>The response content as a string.</returns>
-        private static async Task<string> GetResponseAsync(string endpoint, string modelType = "")
+        private static async Task<string> GetResponseAsync(string endpoint)
         {
-            var returnMessage = await HttpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
+            var response = await HttpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
 
-            return await returnMessage.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                return jsonResponse;
+            }
+
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new HttpRequestException(
+                    "Mistral Platform had an internal server error. Please retry your request.");
+            }
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new HttpRequestException("Authorization error: Invalid API key.");
+            }
+            
+            throw new HttpRequestException($"Unexpected HTTP status code: {response.StatusCode}");
         }
-
+        
 
         /// <summary>
         /// Helper method to serialize an object to JSON and return a JSON response string.
@@ -97,10 +134,28 @@ namespace MistralSharp
         {
             var jsonRequest = JsonSerializer.Serialize(objectToSerialize);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(BaseUrl + endpoint, content).ConfigureAwait(false);
-            var jsonResponse = await response.Content.ReadAsStringAsync();
 
-            return jsonResponse;
+            var response = await HttpClient.PostAsync(BaseUrl + endpoint, content).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                return jsonResponse;
+            }
+
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new HttpRequestException(
+                    "Mistral Platform had an internal server error. Please retry your request.");
+            }
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new HttpRequestException("Authorization error: Invalid API key.");
+            }
+            
+            throw new HttpRequestException($"Unexpected HTTP status code: {response.StatusCode}");
         }
     }
 }
