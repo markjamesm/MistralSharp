@@ -6,7 +6,7 @@ namespace MistralSharp.Models
     {
         public string Object { get; set; }
 
-        public List<ModelData> Data { get; set; }
+        public IEnumerable<ModelData> Data { get; set; }
     }
 
     public class ModelData
@@ -23,7 +23,7 @@ namespace MistralSharp.Models
     
         public object Parent { get; set; }
     
-        public List<Permission> Permission { get; set; }
+        public IEnumerable<Permission> Permission { get; set; }
     }
 
     public class Permission

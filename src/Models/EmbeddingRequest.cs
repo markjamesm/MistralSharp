@@ -9,7 +9,7 @@ namespace MistralSharp.Models
         public string Model { get; set; }
 
         [JsonPropertyName("input")]
-        public List<string> Input { get; set; }
+        public IEnumerable<string> Input { get; set; }
 
         [JsonPropertyName("encoding_format")]
         public string EncodingFormat { get; set; }

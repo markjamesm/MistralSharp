@@ -6,7 +6,7 @@ namespace MistralSharp.Models
     {
         public string Id { get; set; }
         public string Object { get; set; }
-        public List<Embedding> Data { get; set; }
+        public IEnumerable<Embedding> Data { get; set; }
         public string Model { get; set; }
         public TokenUsage TokenUsage { get; set; }
     }
@@ -14,7 +14,7 @@ namespace MistralSharp.Models
     public class Embedding
     {
         public string Object { get; set; }
-        public List<float> EmbeddingList { get; set; }
+        public IEnumerable<float> EmbeddingList { get; set; }
         public int Index { get; set; }
     }
 

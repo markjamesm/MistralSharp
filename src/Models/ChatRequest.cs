@@ -9,7 +9,7 @@ namespace MistralSharp.Models
         public string Model { get; set; }
     
         [JsonPropertyName("messages")]
-        public List<Message> Messages { get; set; }
+        public IEnumerable<Message> Messages { get; set; }
     
         [JsonPropertyName("temperature")]
         public double Temperature { get; set; } = 0.7;

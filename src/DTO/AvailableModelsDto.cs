@@ -10,7 +10,7 @@ namespace MistralSharp.Dto
         public string Object { get; set; }
     
         [JsonPropertyName("data")]
-        public List<ModelData> Data { get; set; }
+        public IEnumerable<ModelData> Data { get; set; }
     }
 
     public class ModelData
@@ -34,7 +34,7 @@ namespace MistralSharp.Dto
         public object Parent { get; set; }
     
         [JsonPropertyName("permission")]
-        public List<Permission> Permission { get; set; }
+        public IEnumerable<Permission> Permission { get; set; }
     }
 
     public class Permission

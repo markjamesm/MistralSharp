@@ -1,4 +1,4 @@
-namespace MistralSharp.Models
+namespace MistralSharp.Dto
 {
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
@@ -12,7 +12,7 @@ namespace MistralSharp.Models
         public string Object { get; set; }
 
         [JsonPropertyName("data")]
-        public List<EmbeddingObject> Data { get; set; }
+        public IEnumerable<EmbeddingObject> Data { get; set; }
 
         [JsonPropertyName("model")]
         public string Model { get; set; }
@@ -27,7 +27,7 @@ namespace MistralSharp.Models
         public string Object { get; set; }
     
         [JsonPropertyName("embedding")]
-        public List<float> Embedding { get; set; }
+        public IEnumerable<float> Embedding { get; set; }
     
         [JsonPropertyName("index")]
         public int Index { get; set; }

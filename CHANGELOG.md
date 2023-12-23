@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3 - 
+
+- Replaced instances of List<> with IEnumerable<> for performance.
+
 ## 1.0.2 - 2023-12-20
 
 - Added more descriptive error messages for HttpClient errors.
