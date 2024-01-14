@@ -23,8 +23,8 @@ namespace MistralSharp.Models
         [JsonPropertyName("stream")]
         public bool Stream { get; set; } = false;
     
-        [JsonPropertyName("safe_mode")]
-        public bool SafeMode { get; set; } = false;
+        [JsonPropertyName("safe_prompt")]
+        public bool SafePrompt { get; set; } = false;
     
         [JsonPropertyName("random_seed")]
         public int? RandomSeed { get; set; } = null;
