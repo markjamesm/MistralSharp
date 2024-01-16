@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-        <Version>1.0.2</Version>
+        <Version>1.0.3</Version>
         <Authors>Mark-James McDougall</Authors>
         <Title>MistralSharp</Title>
         <Description>Unofficial .NET SDK for the Mistral AI Platform. Great for building AI-enhanced apps!
