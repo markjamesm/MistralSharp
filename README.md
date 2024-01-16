@@ -83,7 +83,7 @@ var chatRequest = new ChatRequest()
     
     //  Default: false
     // Whether to inject a safety prompt before all conversations.
-    SafeMode = false,
+    SafePrompt = false,
     
     //  Default: null
     // The seed to use for random sampling. If set, different calls will generate deterministic results.
