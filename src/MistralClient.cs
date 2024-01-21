@@ -17,16 +17,16 @@ namespace MistralSharp
     /// </summary>
     public class MistralClient
     {
-        private static readonly HttpClient HttpClient = new HttpClient();
+        private static readonly HttpClient _httpClient = new HttpClient();
         private const string BaseUrl = "https://api.mistral.ai/v1";
         private const string UserAgent = "MistralSharp";
 
         public MistralClient(string apiKey)
         {
-            HttpClient.DefaultRequestHeaders.Authorization = 
+            _httpClient.DefaultRequestHeaders.Authorization = 
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
             
-            HttpClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
         }
         
         
@@ -61,7 +61,10 @@ namespace MistralSharp
                                                     "non-streaming calls, use the ChatAsync() method instead."); 
             }
             
-            var response = await HttpClient.GetAsync(BaseUrl + ("/chat/completions" ?? "")).ConfigureAwait(false);
+            var jsonRequest = JsonSerializer.Serialize(chatRequest);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+            
+            var response = await _httpClient.PostAsync(BaseUrl + "/chat/completions", content).ConfigureAwait(false);
 
             await using var stream = await response.Content.ReadAsStreamAsync();
             using var reader = new StreamReader(stream);
@@ -88,6 +91,12 @@ namespace MistralSharp
                         var resMapped = DtoMapper.MapChatResponse(res);
                         
                         yield return resMapped;
+                    }
+                    else if (currentEvent.EventType != null)
+                    {
+                        var res = await JsonSerializer.DeserializeAsync<ErrorResponse>(
+                            new MemoryStream(Encoding.UTF8.GetBytes(currentEvent.Data)));
+                        throw new Exception(res.Error.Message);
                     }
 
                     // Reset the current event for the next one
@@ -135,7 +144,7 @@ namespace MistralSharp
         /// <returns>The response content as a string.</returns>
         private static async Task<string> GetResponseAsync(string endpoint)
         {
-            var response = await HttpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
+            var response = await _httpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -170,7 +179,7 @@ namespace MistralSharp
             var jsonRequest = JsonSerializer.Serialize(objectToSerialize);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-            var response = await HttpClient.PostAsync(BaseUrl + endpoint, content).ConfigureAwait(false);
+            var response = await _httpClient.PostAsync(BaseUrl + endpoint, content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

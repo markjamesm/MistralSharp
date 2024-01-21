@@ -144,7 +144,7 @@ var chatStreamRequest = new ChatRequest()
         new Message()
         {
             Role = "user",
-            Content = "How can Mistral AI assist programmers?"
+            Content = "What is an LLM?"
         }
     ],
     MaxTokens = 60,
