@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
-        <Version>1.0.3</Version>
+        <Version>2.0.0</Version>
         <Authors>Mark-James McDougall</Authors>
         <Title>MistralSharp</Title>
         <Description>Unofficial .NET SDK for the Mistral AI Platform. Great for building AI-enhanced apps!
@@ -14,7 +14,7 @@
         <RepositoryUrl>https://github.com/markjamesm/MistralSharp</RepositoryUrl>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
         <PackageReference Include="System.Text.Json" Version="8.0.0" />
     </ItemGroup>
 
