@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0 - 2024-01-21
+
+- Added support for streaming API calls with ChatStreamAsync().
+- Upgraded netstandard from 2.0 to 2.1 to support the ChatStreamAsync() endpoint.
+- Added MistralSharp as User-Agent.
+
 ## 1.0.3 - 2024-01-15
 
 - Renamed parameter `SafeMode` as `SafePrompt` - [Mistral REST API was throwing a 422 since it has been made stricter](https://discord.com/channels/1144547040454508606/1184444810279522374/1195108690353717369)

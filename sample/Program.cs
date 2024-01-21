@@ -13,7 +13,9 @@ var apiKey = configuration["MistralAPIKey"];
 var mistralClient = new MistralClient(apiKey);
 
 
+// ----------------------------------------
 // Get the models endpoint response and print the result to console
+// ----------------------------------------
 var models = await mistralClient.GetAvailableModelsAsync();
 
 Console.WriteLine($"ID: {models.Object}");
@@ -48,7 +50,13 @@ foreach (var modelData in models.Data)
     }
 }
 
-// Create a new chat
+Console.WriteLine("-------------------------");
+
+// ----------------------------------------
+// Make a non-streamining call to the chat API
+// ----------------------------------------
+
+// Create a new ChatRequest object
 var chatRequest = new ChatRequest()
 {
     
@@ -92,7 +100,7 @@ var chatRequest = new ChatRequest()
     
     //  Default: false
     // Whether to inject a safety prompt before all conversations.
-    SafeMode = false,
+    SafePrompt = false,
     
     //  Default: null
     // The seed to use for random sampling. If set, different calls will generate deterministic results.
@@ -119,6 +127,62 @@ foreach (var choice in sampleChat.Choices)
     Console.WriteLine($"Role: {choice.Message.Role}\n" + $"Content: {choice.Message.Content}\n");
 }
 
+Console.WriteLine("-------------------------");
+
+
+// ----------------------------------------
+// Make a streaming call to the chat API
+// ----------------------------------------
+
+// Create a new chat
+// For a full explanation of each property, see the chatRequest object above
+var chatStreamRequest = new ChatRequest()
+{
+    Model = ModelType.MistralMedium,
+    Messages =
+    [
+        new Message()
+        {
+            Role = "user",
+            Content = "How can Mistral AI assist programmers?"
+        }
+    ],
+    MaxTokens = 60,
+    Temperature = 0.7,
+    TopP = 1,
+    Stream = true,
+    SafePrompt = false,
+    RandomSeed = null
+};
+
+// Call the ChatStreamAsync endpoint and pass our ChatRequest object
+var sampleChatStream = mistralClient.ChatStreamAsync(chatStreamRequest);
+
+await foreach (var response in sampleChatStream)
+{
+    Console.WriteLine($"\nChat Response ID: {response.Id}\n" + 
+                      $"Chat Response Created: {response.Created}\n" + 
+                      $"Chat Response Object: {response.ObjectPropertyName}\n" + 
+                      $"Chat Response Model: {response.Model}\n" + 
+                      $"Chat Response Usage:\n" + 
+                      $"Prompt Tokens: {response.Usage.PromptTokens}\n" + 
+                      $"Completion Tokens: {response.Usage.CompletionTokens}\n" + 
+                      $"Total Tokens: {response.Usage.TotalTokens}\n");
+    
+    foreach (var item in response.Choices)
+    {
+        Console.WriteLine($"Finish Reason: {item.FinishReason}\n" + $"Index: {item.Index}\n");
+        Console.WriteLine("Response Messages:");
+        Console.WriteLine($"Role: {item.Message.Role}\n" + $"Content: {item.Message.Content}\n");
+    }
+}
+
+Console.WriteLine("-------------------------");
+
+
+// ----------------------------------------
+// Embed an object using the embeddings API.
+// ----------------------------------------
 
 // Create a new EmbeddingRequest object
 var embeddings = new EmbeddingRequest()
@@ -137,7 +201,7 @@ var embeddings = new EmbeddingRequest()
     }
 };
 
-// Create an embedding and pass it our EmbeddingResponse object
+// Create an embedding and pass it our EmbeddingRequest object
 var embeddedResponse = await mistralClient.CreateEmbeddingsAsync(embeddings);
 
 // Print the embedding to the console
@@ -156,3 +220,5 @@ foreach (var embedding in embeddedResponse.Data)
         embedding.Index,
         string.Join(", ", embedding.EmbeddingList));
 }
+
+Console.WriteLine("-------------------------");

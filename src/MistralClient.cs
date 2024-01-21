@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -18,11 +19,14 @@ namespace MistralSharp
     {
         private static readonly HttpClient HttpClient = new HttpClient();
         private const string BaseUrl = "https://api.mistral.ai/v1";
+        private const string UserAgent = "MistralSharp";
 
         public MistralClient(string apiKey)
         {
             HttpClient.DefaultRequestHeaders.Authorization = 
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
+            
+            HttpClient.DefaultRequestHeaders.Add("User-Agent", UserAgent);
         }
         
         
@@ -49,16 +53,47 @@ namespace MistralSharp
         }
         
 
-        public IAsyncEnumerable<ChatResponse> ChatStreamAsync(ChatRequest chatRequest)
+        public async IAsyncEnumerable<ChatResponse> ChatStreamAsync(ChatRequest chatRequest)
         {
             if (chatRequest.Stream == false)
             {
                 throw new InvalidOperationException("Error: ChatRequest.Stream is set to false. For " +
                                                     "non-streaming calls, use the ChatAsync() method instead."); 
             }
+            
+            var response = await HttpClient.GetAsync(BaseUrl + ("/chat/completions" ?? "")).ConfigureAwait(false);
 
-            throw new NotImplementedException("Error: This endpoint is not yet implemented but will be in " +
-                                              "a future release.");
+            await using var stream = await response.Content.ReadAsStreamAsync();
+            using var reader = new StreamReader(stream);
+
+            var currentEvent = new SseEvent();
+            
+            while (await reader.ReadLineAsync() is { } line)
+            {
+                if (!string.IsNullOrEmpty(line))
+                {
+                    currentEvent.Data = line.Substring("data:".Length).Trim();
+                }
+                else // an empty line indicates the end of an event
+                {
+                    if (currentEvent.Data == "[DONE]")
+                    {
+                        continue;
+                    }
+                    else if (currentEvent.EventType == null)
+                    {
+                        var res = await JsonSerializer.DeserializeAsync<ChatResponseDto>(
+                            new MemoryStream(Encoding.UTF8.GetBytes(currentEvent.Data)));
+
+                        var resMapped = DtoMapper.MapChatResponse(res);
+                        
+                        yield return resMapped;
+                    }
+
+                    // Reset the current event for the next one
+                    currentEvent = new SseEvent();
+                }
+            }
         }
         
         
