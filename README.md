@@ -10,7 +10,7 @@ AI-enhanced apps!
 ## Features
 
 * Implements all Mistral AI Platform REST API endpoints.
-* Targets .NET Standard 2.0 and .NET 8.
+* Targets .NET Standard 2.1 and .NET 8.
 
 ## Usage
 
