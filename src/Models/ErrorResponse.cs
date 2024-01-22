@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json.Serialization;
 
 namespace MistralSharp.Models
