@@ -64,7 +64,10 @@ namespace MistralSharp
             var jsonRequest = JsonSerializer.Serialize(chatRequest);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
             
-            var response = await _httpClient.PostAsync(BaseUrl + "/chat/completions", content).ConfigureAwait(false);
+            var req = new HttpRequestMessage(new HttpMethod("POST"), $"{BaseUrl}/chat/completions");
+            req.Content = content;
+
+            var response = await _httpClient.SendAsync(req).ConfigureAwait(false);
 
             await using var stream = await response.Content.ReadAsStreamAsync();
             using var reader = new StreamReader(stream);

@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MistralSharp", "MistralSharp.csproj", "{25DCAC92-5AF0-464F-89DF-ECE86B16DF3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MistralSample", "..\sample\MistralSample.csproj", "{EDA1E97F-9FD7-4F1E-9CD7-F9A7D48074A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{25DCAC92-5AF0-464F-89DF-ECE86B16DF3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25DCAC92-5AF0-464F-89DF-ECE86B16DF3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25DCAC92-5AF0-464F-89DF-ECE86B16DF3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA1E97F-9FD7-4F1E-9CD7-F9A7D48074A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA1E97F-9FD7-4F1E-9CD7-F9A7D48074A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA1E97F-9FD7-4F1E-9CD7-F9A7D48074A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA1E97F-9FD7-4F1E-9CD7-F9A7D48074A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
