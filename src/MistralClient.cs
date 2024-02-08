@@ -1,45 +1,39 @@
+using MistralSharp.Abstractions;
+using MistralSharp.Domain;
+using MistralSharp.Dto;
+using MistralSharp.Helpers;
+using MistralSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using MistralSharp.Dto;
-using MistralSharp.Helpers;
-using MistralSharp.Models;
 
 namespace MistralSharp
 {
-    /// <summary>
-    /// The MistralClient contains all the methods that can be used to interface with the Mistral AI platform.
-    /// </summary>
-    public class MistralClient
+    /// <inheritdoc />
+    public class MistralClient : IMistralClient
     {
         private static readonly HttpClient HttpClient = new HttpClient();
         private const string BaseUrl = "https://api.mistral.ai/v1";
 
-        public MistralClient(string apiKey)
+        public MistralClient(MistralClientOptions options)
         {
-            HttpClient.DefaultRequestHeaders.Authorization = 
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.ApiKey);
         }
-        
-        
-        /// <summary>
-        /// Enables you to chat with an AI model on the Mistral platform. For streaming, use the StreamChatAsync()
-        /// method instead.
-        /// </summary>
-        /// <param name="chatRequest">A ChatRequest object containing message and other data.</param>
-        /// <returns>A ChatResponse object with the AI's response.</returns>
+
+        /// <inheritdoc />
         public async Task<ChatResponse> ChatAsync(ChatRequest chatRequest)
         {
             if (chatRequest.Stream)
             {
                 throw new InvalidOperationException("Error: stream parameter set to true. For streaming calls," +
-                                                    "use the StreamChatAsync() method instead."); 
+                                                    "use the StreamChatAsync() method instead.");
             }
-            
+
             var jsonResponse = await PostToApiAsync(chatRequest, "/chat/completions");
             var chatResponseDto = JsonSerializer.Deserialize<ChatResponseDto>(jsonResponse);
 
@@ -47,52 +41,42 @@ namespace MistralSharp
 
             return chatResponse;
         }
-        
 
+        /// <inheritdoc />
         public IAsyncEnumerable<ChatResponse> ChatStreamAsync(ChatRequest chatRequest)
         {
             if (chatRequest.Stream == false)
             {
                 throw new InvalidOperationException("Error: ChatRequest.Stream is set to false. For " +
-                                                    "non-streaming calls, use the ChatAsync() method instead."); 
+                                                    "non-streaming calls, use the ChatAsync() method instead.");
             }
 
             throw new NotImplementedException("Error: This endpoint is not yet implemented but will be in " +
                                               "a future release.");
         }
-        
-        
-        /// <summary>
-        /// Get the list of available models offered on the Mistral AI platform.
-        /// </summary>
-        /// <returns>An AvailableModels object</returns>
+
+        /// <inheritdoc />
         public async Task<AvailableModels> GetAvailableModelsAsync()
         {
             var jsonResponse = await GetResponseAsync("/models");
             var availableModelsDto = JsonSerializer.Deserialize<AvailableModelsDto>(jsonResponse);
 
             var availableModels = DtoMapper.MapAvailableModels(availableModelsDto);
-            
+
             return availableModels;
         }
-        
-        
-        /// <summary>
-        /// The embeddings API allows you to embed sentences and can be used to power a RAG application.
-        /// </summary>
-        /// <param name="embeddingRequest"></param>
-        /// <returns>An EmbeddingResponse object.</returns>
+
+        /// <inheritdoc />
         public async Task<EmbeddingResponse> CreateEmbeddingsAsync(EmbeddingRequest embeddingRequest)
         {
             var jsonResponse = await PostToApiAsync(embeddingRequest, "/embeddings");
             var embeddingResponseDto = JsonSerializer.Deserialize<EmbeddingResponseDto>(jsonResponse);
-            
+
             var embeddingResponse = DtoMapper.MapEmbeddingResponse(embeddingResponseDto);
-            
+
             return embeddingResponse;
         }
-        
-        
+
         /// <summary>
         /// Retrieves the response from the specified API endpoint asynchronously.
         /// </summary>
@@ -119,10 +103,9 @@ namespace MistralSharp
             {
                 throw new HttpRequestException("Authorization error: Invalid API key.");
             }
-            
+
             throw new HttpRequestException($"Unexpected HTTP status code: {response.StatusCode}");
         }
-        
 
         /// <summary>
         /// Helper method to serialize an object to JSON and return a JSON response string.
@@ -154,7 +137,7 @@ namespace MistralSharp
             {
                 throw new HttpRequestException("Authorization error: Invalid API key.");
             }
-            
+
             throw new HttpRequestException($"Unexpected HTTP status code: {response.StatusCode}");
         }
     }

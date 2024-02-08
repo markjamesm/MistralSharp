@@ -24,6 +24,15 @@ To access the API endpoints, create a new instance of the `MistralClient` class 
 var mistralClient = new MistralClient(apiKey);
 ```
 
+### Dependency Injection
+
+```csharp
+services.AddMistral(options =>
+{
+    options.ApiKey = "YOUR_API_KEY";
+});
+```
+
 ## Endpoints
 
 ### GetAvailableModelsAsync()
