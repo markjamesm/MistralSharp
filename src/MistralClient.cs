@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using MistralSharp.Abstractions;
 using MistralSharp.Domain;
 using MistralSharp.Dto;
@@ -17,13 +18,15 @@ namespace MistralSharp
     /// <inheritdoc />
     public class MistralClient : IMistralClient
     {
-        private static readonly HttpClient HttpClient = new HttpClient();
+        private readonly HttpClient _httpClient = new HttpClient();
         private const string BaseUrl = "https://api.mistral.ai/v1";
 
         public MistralClient(MistralClientOptions options)
         {
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.ApiKey);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.ApiKey);
         }
+
+        public MistralClient(IOptions<MistralClientOptions> options) : this(options.Value) { }
 
         /// <inheritdoc />
         public async Task<ChatResponse> ChatAsync(ChatRequest chatRequest)
@@ -82,9 +85,9 @@ namespace MistralSharp
         /// </summary>
         /// <param name="endpoint">The API endpoint to send the request to.</param>
         /// <returns>The response content as a string.</returns>
-        private static async Task<string> GetResponseAsync(string endpoint)
+        private async Task<string> GetResponseAsync(string endpoint)
         {
-            var response = await HttpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
+            var response = await _httpClient.GetAsync(BaseUrl + (endpoint ?? "")).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -113,12 +116,12 @@ namespace MistralSharp
         /// <param name="objectToSerialize">The object to be serialized.</param>
         /// <param name="endpoint">The endpoint to send the JSON request to.</param>
         /// <returns>A string representing the JSON response.</returns>
-        private static async Task<string> PostToApiAsync(object objectToSerialize, string endpoint)
+        private async Task<string> PostToApiAsync(object objectToSerialize, string endpoint)
         {
             var jsonRequest = JsonSerializer.Serialize(objectToSerialize);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-            var response = await HttpClient.PostAsync(BaseUrl + endpoint, content).ConfigureAwait(false);
+            var response = await _httpClient.PostAsync(BaseUrl + endpoint, content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

@@ -1,4 +1,9 @@
-﻿namespace MistralSharp.Extensions.DependencyInjection
+﻿using Microsoft.Extensions.DependencyInjection;
+using MistralSharp.Abstractions;
+using MistralSharp.Domain;
+using System;
+
+namespace MistralSharp.Extensions.DependencyInjection
 {
     public static class MistralServiceCollectionExtensions
     {
