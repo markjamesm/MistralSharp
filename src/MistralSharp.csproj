@@ -25,9 +25,15 @@
         </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+    </ItemGroup>
+
     <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
-        <ReadLinesFromFile File="../RELEASENOTES.txt" >
-            <Output TaskParameter="Lines" ItemName="ReleaseNoteLines"/>
+        <ReadLinesFromFile File="../RELEASENOTES.txt">
+            <Output TaskParameter="Lines" ItemName="ReleaseNoteLines" />
         </ReadLinesFromFile>
         <PropertyGroup>
             <PackageReleaseNotes>
