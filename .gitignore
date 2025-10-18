@@ -20,7 +20,8 @@
 **/.idea/**/*.iml
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
-/.idea
+.idea/
+src/.idea
 
 *.suo
 *.user
