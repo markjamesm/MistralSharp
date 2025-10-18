@@ -1,16 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MistralSharp;
+using MistralSharp.Domain;
 using MistralSharp.Models;
 
 var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.AddUserSecrets<Program>();
 var configuration = configurationBuilder.Build();
 
-// API key is stored in dotnet secrets
-var apiKey = configuration["MistralAPIKey"];
-
-// Create a new instance of MistralClient and pass your API key
-var mistralClient = new MistralClient(apiKey);
+// Create a new instance of MistralClient and pass your API key in the options
+var mistralClient = new MistralClient(new MistralClientOptions()
+{
+    ApiKey = configuration["MistralAPIKey"]
+});
 
 
 // Get the models endpoint response and print the result to console
@@ -27,7 +28,7 @@ foreach (var modelData in models.Data)
                       $"Model Root: {modelData.Root}\n" +
                       $"Model Parent: {modelData.Parent}"
     );
-    
+
     Console.WriteLine("Permissions:");
 
     foreach (var permission in modelData.Permission)
@@ -51,10 +52,9 @@ foreach (var modelData in models.Data)
 // Create a new chat
 var chatRequest = new ChatRequest()
 {
-    
     // The ID of the model to use. You can use GetAvailableModelsAsync() to get the list of available models
     Model = ModelType.MistralMedium,
-    
+
     // Pass a list of messages to the model. 
     // The role can either be "user" or "agent"
     // Content is the message content
@@ -66,34 +66,30 @@ var chatRequest = new ChatRequest()
             Content = "How can Mistral AI assist programmers?"
         }
     ],
-    
+
     //The maximum number of tokens to generate in the completion.
     // The token count of your prompt plus max_tokens cannot exceed the model's context length.
     MaxTokens = 16,
-    
+
     //  Default: 0.7
     // What sampling temperature to use, between 0.0 and 2.0.
     // Higher values like 0.8 will make the output more random, while lower values like 0.2 will make
     // it more focused and deterministic.
     Temperature = 0.7,
-    
+
     //  Default: 1
     // Nucleus sampling, where the model considers the results of the tokens with top_p probability mass.
     // So 0.1 means only the tokens comprising the top 10% probability mass are considered.
     // Mistral generally recommends altering this or temperature but not both.
     TopP = 1,
-    
+
     //  Default: false
     // Whether to stream back partial progress. If set, tokens will be sent as data-only server-sent events
     // as they become available, with the stream terminated by a data: [DONE] message. Otherwise, the server will
     // hold the request open until the timeout or until completion, with the response containing the full
     // result as JSON.
     Stream = false,
-    
-    //  Default: false
-    // Whether to inject a safety prompt before all conversations.
-    SafeMode = false,
-    
+
     //  Default: null
     // The seed to use for random sampling. If set, different calls will generate deterministic results.
     RandomSeed = null
@@ -102,13 +98,13 @@ var chatRequest = new ChatRequest()
 // Call the chat endpoint and pass our ChatRequest object
 var sampleChat = await mistralClient.ChatAsync(chatRequest);
 
-Console.WriteLine($"\nChat Response ID: {sampleChat.Id}\n" + 
-                  $"Chat Response Created: {sampleChat.Created}\n" + 
-                  $"Chat Response Object: {sampleChat.ObjectPropertyName}\n" + 
-                  $"Chat Response Model: {sampleChat.Model}\n" + 
-                  $"Chat Response Usage:\n" + 
-                  $"Prompt Tokens: {sampleChat.Usage.PromptTokens}\n" + 
-                  $"Completion Tokens: {sampleChat.Usage.CompletionTokens}\n" + 
+Console.WriteLine($"\nChat Response ID: {sampleChat.Id}\n" +
+                  $"Chat Response Created: {sampleChat.Created}\n" +
+                  $"Chat Response Object: {sampleChat.ObjectPropertyName}\n" +
+                  $"Chat Response Model: {sampleChat.Model}\n" +
+                  $"Chat Response Usage:\n" +
+                  $"Prompt Tokens: {sampleChat.Usage.PromptTokens}\n" +
+                  $"Completion Tokens: {sampleChat.Usage.CompletionTokens}\n" +
                   $"Total Tokens: {sampleChat.Usage.TotalTokens}\n");
 
 Console.WriteLine("Choices:");
@@ -125,10 +121,10 @@ var embeddings = new EmbeddingRequest()
 {
     // The ID of the model to use for this request.
     Model = ModelType.MistralEmbed,
-    
+
     // The format of the output data.
     EncodingFormat = "float",
-    
+
     // The list of strings to embed.
     Input = new List<string>()
     {
@@ -148,7 +144,7 @@ Console.WriteLine("EmbeddingResponse:\nId: {0}\nObject: {1}\nModel: {2}\nPromptT
     embeddedResponse.Model,
     embeddedResponse.TokenUsage?.PromptTokens,
     embeddedResponse.TokenUsage?.TotalTokens);
-        
+
 foreach (var embedding in embeddedResponse.Data)
 {
     Console.WriteLine("  - Object: {0}\n    Index: {1}\n    EmbeddingList: {2}",

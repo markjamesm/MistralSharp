@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\MistralSharp.csproj" />
+    <ProjectReference Include="..\..\src\MistralSharp.csproj" />
   </ItemGroup>
 
 </Project>

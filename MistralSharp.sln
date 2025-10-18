@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34526.213
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MistralSharp", "src\MistralSharp.csproj", "{C563C4BA-3ABF-413B-B1F7-72411B9A34DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MistralSample", "sample\MistralSample.csproj", "{C0FCEA79-5F27-4BE7-8500-F4F58CD66EBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MistralSharp.Tests", "tests\MistralSharp.Tests\MistralSharp.Tests.csproj", "{D019FB18-39DF-49C6-93F2-92AEF1C75D06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C563C4BA-3ABF-413B-B1F7-72411B9A34DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C563C4BA-3ABF-413B-B1F7-72411B9A34DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C563C4BA-3ABF-413B-B1F7-72411B9A34DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C563C4BA-3ABF-413B-B1F7-72411B9A34DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0FCEA79-5F27-4BE7-8500-F4F58CD66EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0FCEA79-5F27-4BE7-8500-F4F58CD66EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0FCEA79-5F27-4BE7-8500-F4F58CD66EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0FCEA79-5F27-4BE7-8500-F4F58CD66EBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D019FB18-39DF-49C6-93F2-92AEF1C75D06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D019FB18-39DF-49C6-93F2-92AEF1C75D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D019FB18-39DF-49C6-93F2-92AEF1C75D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D019FB18-39DF-49C6-93F2-92AEF1C75D06}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
