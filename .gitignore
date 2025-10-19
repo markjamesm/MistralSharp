@@ -22,6 +22,7 @@
 **/.idea/**/modules.xml
 .idea/
 src/.idea
+sample/.idea
 
 *.suo
 *.user
